@@ -1,0 +1,19 @@
+[package]
+name = "qmc5883l-async"
+authors = ["Henrik Alsér <henrik.alser@me.com>"]
+categories = ["embedded", "hardware-support", "no-std"]
+description = "An async embedded rust driver for the QMC5883L magnetometer"
+documentation = "https://github.com/kalkyl/qmc5883l-async"
+keywords = ["embedded-hal-async-driver", "compass"]
+license = "AGPL-3.0-or-later"
+repository = "https://github.com/kalkyl/qmc5883l-async"
+version = "0.0.1"
+edition = "2018"
+
+[dependencies]
+embedded-hal = "0.2.3"
+embedded-hal-async = { version = "0.1.0-alpha.0" }
+
+[patch.crates-io]
+embedded-hal-async = { git = "https://github.com/rust-embedded/embedded-hal" }
+embedded-hal = { git = "https://github.com/rust-embedded/embedded-hal" }
