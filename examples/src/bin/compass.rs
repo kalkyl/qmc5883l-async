@@ -30,18 +30,19 @@ async fn main(_spawner: Spawner, p: Peripherals) {
     compass.continuous().await.unwrap();
 
     loop {
-        let (x, y, z) = compass.mag().await.unwrap();
-        let mut heading = atan2(y as f64, x as f64) as f32 + DECLINATION_RADS;
-        if heading < 0.0 {
-            heading += 2.0 * PI;
-        } else if heading > 2.0 * PI {
-            heading -= 2.0 * PI;
+        if let Ok((x, y, z)) = compass.mag().await {
+            let mut heading = atan2(y as f64, x as f64) as f32 + DECLINATION_RADS;
+            if heading < 0.0 {
+                heading += 2.0 * PI;
+            } else if heading > 2.0 * PI {
+                heading -= 2.0 * PI;
+            }
+            let heading_degrees = heading * 180.0 / PI;
+            info!(
+                "x={}, y={}, z={}: heading={} degrees",
+                x, y, z, heading_degrees
+            );
+            Timer::after(Duration::from_millis(500)).await;
         }
-        let heading_degrees = heading * 180.0 / PI;
-        info!(
-            "x={}, y={}, z={}: heading={} degrees",
-            x, y, z, heading_degrees
-        );
-        Timer::after(Duration::from_millis(100)).await;
     }
 }
