@@ -52,7 +52,7 @@ async fn gyro_task(mut mpu: Mpu6050<I2cBusDevice<'static, ThreadModeRawMutex, Tw
     loop {
         // Get gyro data, scaled with sensitivity
         let gyro = mpu.get_gyro().await.unwrap();
-        info!("gyro: {:?}", (gyro[0], gyro[1], gyro[2]));
+        info!("gyro: {:?}", gyro);
         Timer::after(Duration::from_millis(500)).await;
     }
 }
