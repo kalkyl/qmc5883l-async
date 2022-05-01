@@ -11,6 +11,7 @@ use defmt::*;
 use embassy::executor::Spawner;
 use embassy::blocking_mutex::raw::ThreadModeRawMutex;
 use embassy::mutex::Mutex;
+use embassy::util::Forever;
 use embassy::time::{Duration, Timer};
 use embassy_nrf::twim::{self, Twim};
 use embassy_nrf::{interrupt, Peripherals, peripherals::TWISPI0};
@@ -25,10 +26,12 @@ const DECLINATION_RADS: f32 = 0.024434609;
 
 #[embassy::main]
 async fn main(_spawner: Spawner, p: Peripherals) {
+    static I2C_BUS: Forever<Mutex::<ThreadModeRawMutex, Twim<TWISPI0>>> = Forever::new();
     let config = twim::Config::default();
     let irq = interrupt::take!(SPIM0_SPIS0_TWIM0_TWIS0_SPI0_TWI0);
     let i2c_bus = Mutex::<ThreadModeRawMutex, Twim<TWISPI0>>::new(Twim::new(p.TWISPI0, irq, p.P0_03, p.P0_04, config));
-    let i2c_dev = I2cBusDevice::new(&i2c_bus);
+    let i2c_bus = I2C_BUS.put(i2c_bus);
+    let i2c_dev = I2cBusDevice::new(i2c_bus);
 
     let mut compass = QMC5883L::new(i2c_dev).await.unwrap();
     compass.continuous().await.unwrap();
