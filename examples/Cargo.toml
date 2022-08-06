@@ -20,12 +20,6 @@ panic-probe = { version = "0.3.0", features = ["print-defmt"] }
 mpu6050-async = { git = "https://github.com/kalkyl/mpu6050-async" }
 qmc5883l-async = { path = "../"}
 libm = "0.2.2"
-embedded-hal-async = { version = "0.1.0-alpha.0" }
-
-
-[patch.crates-io]
-embedded-hal-async = { git = "https://github.com/rust-embedded/embedded-hal" }
-embedded-hal = { git = "https://github.com/rust-embedded/embedded-hal" }
 
 [features]
 # set logging levels here
