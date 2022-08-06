@@ -8,8 +8,8 @@
 use nrf_embassy as _; // global logger + panicking-behavior
 
 use defmt::*;
-use embassy::executor::Spawner;
-use embassy::time::{Duration, Timer};
+use embassy_executor::executor::Spawner;
+use embassy_executor::time::{Duration, Timer};
 use embassy_nrf::twim::{self, Twim};
 use embassy_nrf::{interrupt, Peripherals};
 use qmc5883l_async::*;
@@ -20,7 +20,7 @@ use libm::atan2;
 // readings. See http://www.magnetic-declination.com/
 const DECLINATION_RADS: f32 = 0.024434609;
 
-#[embassy::main]
+#[embassy_executor::main]
 async fn main(_spawner: Spawner, p: Peripherals) {
     let config = twim::Config::default();
     let irq = interrupt::take!(SPIM0_SPIS0_TWIM0_TWIS0_SPI0_TWI0);
